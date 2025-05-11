@@ -1,4 +1,6 @@
-[!][logo](/screenshots/logo.png)
+![logo](https://github.com/EminHaziyev/home-cloud-storage/screenshots/logo.png?raw=true)
+
+
 # Home Cloud Storage Server
 
 This project is a functional personal cloud storage system. It is built using Node.js, Express, and EJS. It allows users to upload, delete, download files, and send commands to the server via the terminal.

@@ -109,6 +109,8 @@ Thanks for your interest in contributing!
 - [ ] Add more secure authentication
 - [ ] Add folder upload with subfolder support
 - [ ] Add backup
+- [ ] Add public link to share some folders
+- [ ] Add temporary files to easily share data between computers (like clipboard)
 
 
 ## Contact

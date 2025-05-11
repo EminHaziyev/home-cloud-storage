@@ -1,4 +1,5 @@
-![logo](https://github.com/EminHaziyev/home-cloud-storage/blob/main/screenshots/logo.png =200x200)
+<img src="https://raw.githubusercontent.com/EminHaziyev/home-cloud-storage/main/screenshots/logo.png" alt="logo" width="200" height="200">
+
 
 
 # Home Cloud Storage Server

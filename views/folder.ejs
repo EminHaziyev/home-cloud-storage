@@ -478,7 +478,7 @@
             <% } else { %>
             <div class="file-card">
               <a
-                href="/download/<%= (folder + '/' + file.name).replace(/\/+/g, '/') %>"
+                href="/preview/<%= (folder + '/' + file.name).replace(/\/+/g, '/') %>"
               >
                 <div class="file-icon folder-icon">📄</div>
                 <div class="file-info">
@@ -527,6 +527,9 @@
             />
             <br />
             <button id="uploadBtn">Upload</button>
+            <div id="progressContainer" style="width: 100%; background: #e0e0e0; border-radius: 10px; margin-top: 15px; height: 20px;">
+              <div id="progressBar" style="height: 100%; width: 0%; background: #4285f4; border-radius: 10px;"></div>
+            </div>
             <p id="status"></p>
           </div>
         </div>
@@ -699,54 +702,69 @@
         }
       }
 
-      document
-        .getElementById("uploadBtn")
-        .addEventListener("click", async () => {
-          const files = document.getElementById("fileInput").files;
-          if (!files.length) {
-            document.getElementById("status").textContent = "Əvvəlcə fayl seç";
-            return;
-          }
 
-          const formData = new FormData();
-          for (const file of files) {
-            formData.append("files", file); // "files" must match backend field name
-          }
+      
+  document.getElementById("uploadBtn").addEventListener("click", () => {
+    const files = document.getElementById("fileInput").files;
+    const status = document.getElementById("status");
+    const progressBar = document.getElementById("progressBar");
 
-          // Get current folder from URL (e.g., /codes => "codes")
-          const currentFolder = window.location.pathname.replace(/^\/+/, "");
-          const uploadUrl = currentFolder
-            ? `/upload/${currentFolder}`
-            : "/upload/storage/salam";
+    if (!files.length) {
+      status.textContent = "Əvvəlcə fayl seç";
+      return;
+    }
 
-          const res = await fetch(uploadUrl, {
-            method: "POST",
-            body: formData,
-          });
+    const formData = new FormData();
+    for (const file of files) {
+      formData.append("files", file); // must match backend field name
+    }
 
-          const contentType = res.headers.get("content-type") || "";
+    const currentFolder = window.location.pathname.replace(/^\/+/, "");
+    const uploadUrl = currentFolder
+      ? `/upload/${currentFolder}`
+      : "/upload/storage/salam";
 
-          if (contentType.includes("application/json")) {
-            const data = await res.json();
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", uploadUrl);
 
-            if (res.ok) {
-              document.getElementById("status").textContent =
-                data.message || "Uploaded successfully";
-              location.reload();
-            } else {
-              document.getElementById("status").textContent =
-                data.error || "Upload failed";
-              alert(data.error || "Upload failed");
-            }
-          } else {
-            // Server returned HTML (likely rendered error page)
-            const html = await res.text();
-            // Replace the whole page with server-rendered error page
-            document.open();
-            document.write(html);
-            document.close();
-          }
-        });
+    // Progress event
+    xhr.upload.addEventListener("progress", function (e) {
+      if (e.lengthComputable) {
+        const percent = (e.loaded / e.total) * 100;
+        progressBar.style.width = percent + "%";
+        progressBar.textContent = Math.floor(percent) + "%";
+      }
+    });
+
+    // Success/complete
+    xhr.onload = async function () {
+      const contentType = xhr.getResponseHeader("content-type") || "";
+
+      if (contentType.includes("application/json")) {
+        const data = JSON.parse(xhr.responseText);
+
+        if (xhr.status >= 200 && xhr.status < 300) {
+          status.textContent = data.message || "Uploaded successfully";
+          location.reload();
+        } else {
+          status.textContent = data.error || "Upload failed";
+          alert(data.error || "Upload failed");
+        }
+      } else {
+        document.open();
+        document.write(xhr.responseText);
+        document.close();
+      }
+    };
+
+    xhr.onerror = function () {
+      status.textContent = "Şəbəkə xətası baş verdi";
+    };
+
+    xhr.send(formData);
+  });
+
+
     </script>
   </body>
 </html>

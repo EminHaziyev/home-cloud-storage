@@ -64,19 +64,8 @@ const generalLimiter = rateLimit({
   max: 30,
   keyGenerator: (req) => req.connection.remoteAddress,         
   message: "So many requests. You are suspicious 0_0",
-});
+})
 
-
-
-app.use((req, res, next) => {
-  const isLocalhost = req.hostname === 'localhost' || req.hostname === '127.0.0.1';
-
-  if (!isLocalhost && req.headers["x-forwarded-proto"] !== "https") {
-    return res.status(403).send("HTTPS required.");
-  }
-
-  next();
-});
 
 
 
@@ -147,7 +136,7 @@ function checkPermission(permission){
 
 app.use(cors());
 app.use(express.json());
-
+app.set('trust proxy',true);
 
 app.use("/upload", authMiddleware,generalLimiter, checkPermission("upload"));
 app.use("/delete", authMiddleware ,generalLimiter, checkPermission("delete"));
@@ -157,6 +146,7 @@ app.use("/files", authMiddleware,generalLimiter);
 app.use("/storage", authMiddleware,generalLimiter, checkPermission("read"));
 app.use("/logs", authMiddleware ,generalLimiter, checkPermission("logs"));
 app.use("/terminal", authMiddleware ,generalLimiter, checkPermission("terminal"));
+app.use("/preview", authMiddleware ,generalLimiter, checkPermission("preview"));
 
 
 async function getFolderSize(folderPath) {
@@ -235,6 +225,56 @@ app.get("/download/{*filePath}", (req, res) => {
   console.log(`User ${user} downloaded ${filePath}`)
   res.download(filePath);
 });
+
+
+
+
+
+// Preview Route for files and folders
+app.get("/preview/{*filePath}", (req, res) => {
+  const previewPath = path.join(__dirname, "uploads/storage/", req.params.filePath.join('/'));
+
+  if (previewPath.includes("..")) {
+    return res.status(400).send("Invalid path");
+  }
+
+  fs.stat(previewPath, (err, stats) => {
+    if (err) return res.status(500).send("Error checking path");
+
+    if (stats.isDirectory()) {
+      fs.readdir(previewPath, (err, items) => {
+        if (err) return res.status(500).send("Error reading folder");
+        
+        const files = items.map((item) => {
+          const fullPath = path.join(previewPath, item);
+          const stat = fs.statSync(fullPath);
+          return {
+            name: item,
+            type: stat.isDirectory() ? "directory" : "file",
+          };
+        });
+        
+        return res.render("preview", { folder: req.params.filePath, files: files });
+      });
+    } else if (stats.isFile()) {
+      const extname = path.extname(previewPath).toLowerCase();
+      
+      if (extname === '.txt' || extname === '.log') {
+        fs.readFile(previewPath, 'utf8', (err, data) => {
+          if (err) return res.status(500).send("Error reading file");
+          return res.render("previewFile", { fileName: path.basename(previewPath), content: data });
+        });
+      } else if (extname === '.jpg' || extname === '.jpeg' || extname === '.png') {
+        return res.render(previewPath);
+      } else {
+        return res.status(400).send("Unsupported file type for preview");
+      }
+    } else {
+      return res.status(404).send("File or folder not found");
+    }
+  });
+});
+
 
 
 

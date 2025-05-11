@@ -1,7 +1,7 @@
 {
     "root": {
       "password": "root",
-      "permissions": ["upload" , "mkdir" , "delete", "terminal", "read", "download", "logs", "terminal"]
+      "permissions": ["upload" , "mkdir" , "delete", "terminal", "read", "download", "logs", "terminal","preview"]
     }
   }
   

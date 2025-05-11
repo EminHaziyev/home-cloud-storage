@@ -20,6 +20,10 @@ This project is a functional personal cloud storage system. It is built using No
 > Simple authentication system is not a security problem for me because I am connecting to this server using VPN
 
 
+## Screenshots
+
+<img src="https://raw.githubusercontent.com/EminHaziyev/home-cloud-storage/main/screenshots/ss1.png" alt="logo" width="1000" >
+
 ## Getting Started
 Use these instructions to run your own home cloud server on your server/computer.
 

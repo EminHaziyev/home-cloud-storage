@@ -35,7 +35,7 @@ Use these instructions to run your own home cloud server on your server/computer
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/EminHaziyev/home-cloud-server
+   git clone https://github.com/EminHaziyev/home-cloud-server.git
    ```
 2. Install NPM packages
    ```sh

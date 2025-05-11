@@ -52,7 +52,8 @@ Use these instructions to run your own home cloud server on your server/computer
   
   
    ```
-4. Open localhost:3000/ to enjoy your cloud server.
+4. Create /uploads/storage/home directory
+5. Open localhost:3000/ to enjoy your cloud server.
 
 ## Usage
 

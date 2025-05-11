@@ -120,6 +120,6 @@ Thanks for your interest in contributing!
 
 ## License
 
-[Apache License 2.0](https://github.com/EminHaziyev/home-cloud-server/blob/main/LICENSE)
+[Apache License 2.0](https://github.com/EminHaziyev/home-cloud-storage/blob/main/LICENSE)
 
 

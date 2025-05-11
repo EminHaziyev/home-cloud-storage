@@ -262,10 +262,10 @@ app.get("/preview/{*filePath}", (req, res) => {
       if (extname === '.txt' || extname === '.log') {
         fs.readFile(previewPath, 'utf8', (err, data) => {
           if (err) return res.status(500).send("Error reading file");
-          return res.render("previewFile", { fileName: path.basename(previewPath), content: data });
+          return res.sendFile(previewPath);
         });
       } else if (extname === '.jpg' || extname === '.jpeg' || extname === '.png') {
-        return res.render(previewPath);
+        return res.sendFile(previewPath);
       } else {
         return res.status(400).send("Unsupported file type for preview");
       }

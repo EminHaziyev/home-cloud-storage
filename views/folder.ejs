@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HomeDrive v1.0</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <style>
+      /* Reset and Base Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background-color: #f8f9fa;
+        color: #333;
+      }
+
+      /* Layout */
+      .container {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      /* Sidebar */
+      .sidebar {
+        width: 250px;
+        background-color: #fff;
+        border-right: 1px solid #e0e0e0;
+        padding: 20px 0;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        padding: 0 20px 20px;
+        border-bottom: 1px solid #e0e0e0;
+        margin-bottom: 20px;
+      }
+
+      .logo h1 {
+        font-size: 20px;
+        margin-left: 10px;
+        color: #4285f4;
+      }
+
+      .nav-item {
+        padding: 12px 20px;
+        display: flex;
+        align-items: center;
+        color: #5f6368;
+        cursor: pointer;
+      }
+
+      .nav-item:hover {
+        background-color: #f1f3f4;
+      }
+
+      .nav-item.active {
+        background-color: #e8f0fe;
+        color: #1a73e8;
+        font-weight: 500;
+      }
+
+      .nav-item i {
+        margin-right: 12px;
+        font-size: 18px;
+      }
+
+      /* Main Content */
+      .main-content {
+        flex: 1;
+        padding: 20px;
+      }
+
+      /* Header */
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #e0e0e0;
+        margin-bottom: 20px;
+      }
+
+      .search-bar {
+        flex: 1;
+        max-width: 700px;
+        background: #f1f3f4;
+        border-radius: 8px;
+        padding: 8px 16px;
+        display: flex;
+        align-items: center;
+      }
+
+      .search-bar input {
+        background: transparent;
+        border: none;
+        outline: none;
+        padding: 8px;
+        width: 100%;
+        font-size: 14px;
+      }
+
+      .user-profile {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-color: #1a73e8;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      /* System Stats Section */
+      .system-stats {
+        background-color: #ffffff;
+        border-radius: 12px;
+        padding: 15px;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .stats-title {
+        font-size: 18px;
+        font-weight: 500;
+        margin-bottom: 12px;
+        color: #4285f4;
+        display: flex;
+        align-items: center;
+      }
+
+      .stats-title .icon {
+        margin-right: 8px;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+      }
+
+      .stat-card {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .stat-label {
+        font-size: 14px;
+        color: #5f6368;
+        margin-bottom: 5px;
+      }
+
+      .stat-value {
+        font-size: 18px;
+        font-weight: 500;
+        color: #1a73e8;
+      }
+
+      .memory-bar {
+        height: 8px;
+        background-color: #e0e0e0;
+        border-radius: 4px;
+        margin-top: 8px;
+        overflow: hidden;
+      }
+
+      .memory-used {
+        height: 100%;
+        background-color: #4285f4;
+        border-radius: 4px;
+      }
+
+      .cpu-bar {
+        height: 8px;
+        background-color: #e0e0e0;
+        border-radius: 4px;
+        margin-top: 8px;
+        overflow: hidden;
+      }
+
+      .cpu-used {
+        height: 100%;
+        background-color: #0f9d58;
+        border-radius: 4px;
+      }
+
+      /* Files Section */
+      .section-title {
+        font-size: 16px;
+        font-weight: 500;
+        margin-bottom: 16px;
+        color: #5f6368;
+      }
+
+      .files-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 16px;
+      }
+
+      .file-card {
+        background-color: #ffffff;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        transition: box-shadow 0.2s;
+      }
+
+      .file-card:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .main-content {
+        display: flex;
+        width: 100%;
+        gap: 20px;
+        justify-content: center;
+      }
+
+      #terminalOutput {
+        width: 100%;
+      }
+
+      #leftmenu {
+        width: 100%;
+      }
+
+      .file-icon {
+        height: 140px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #158aff;
+        color: #5f6368;
+        font-size: 60px;
+      }
+
+      a {
+        text-decoration: none;
+        color: #020072;
+      }
+
+      .folder-icon {
+        color: #ffd04c;
+      }
+
+      .doc-icon {
+        color: #4285f4;
+      }
+
+      .sheet-icon {
+        color: #0f9d58;
+      }
+
+      .slide-icon {
+        color: #f4b400;
+      }
+
+      .pdf-icon {
+        color: #ea4335;
+      }
+
+      .image-icon {
+        color: #8e44ad;
+      }
+
+      .file-info {
+        padding: 12px;
+        font-size: larger;
+      }
+
+      .file-name {
+        font-size: 19px;
+        font-weight: 500;
+        margin-bottom: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .file-meta {
+        font-size: 12px;
+        color: #5f6368;
+      }
+
+      #fileInput {
+        height: 300px;
+        width: 100%;
+        background-color: #c3c9ff;
+        border-radius: 30px;
+      }
+
+      #uploadBtn {
+        width: 100%;
+        height: 50px;
+        border-radius: 30px;
+      }
+
+      details > summary {
+        list-style: none;
+      }
+
+      details > summary::-webkit-details-marker {
+        display: none;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .container {
+          flex-direction: column;
+        }
+
+        .sidebar {
+          width: 100%;
+          border-right: none;
+          border-bottom: 1px solid #e0e0e0;
+          padding: 10px 0;
+        }
+
+        .logo {
+          padding: 0 15px 15px;
+        }
+
+        .nav-item {
+          padding: 10px 15px;
+        }
+
+        .files-grid {
+          grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        }
+
+        .stats-grid {
+          grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        }
+      }
+
+      /* Icons (using Unicode characters as a simple alternative) */
+      .icon {
+        font-style: normal;
+        font-size: 24px;
+      }
+      .hidden {
+        display: none;
+      }
+      #right-menu{
+        width: 100%;
+      }
+      .terminal{
+        display: none;
+      }
+      #right-menu iframe{
+        height: 500px;
+        width: 100%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <div class="logo">
+          <span class="icon">☁️</span>
+          <h1>EminDrive</h1>
+        </div>
+
+        <div class="nav-item active">
+          <span class="icon">📁</span>
+          <span>Files</span>
+        </div>
+        <a href="/logs">
+          <div class="nav-item active">
+            <span class="icon">📟</span>
+            <span>Logs</span>
+          </div>
+        </a>
+        
+          <div onclick="toggleTerminal()" class="nav-item active">
+            <span class="icon">📟</span>
+            <span>Terminal</span>
+          </div>
+        
+        <div id="folder-tree" class="folder-tree" style="color: #1a73e8"></div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <div id="leftmenu">
+          <!-- System Stats Section -->
+          <div class="system-stats">
+            <div class="stats-title">
+              <span class="icon">📊</span>
+              <span>System Statistics</span>
+            </div>
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-label">Uptime</div>
+                <div class="stat-value" id="uptime">Loading...</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Memory Usage</div>
+                <div class="stat-value" id="memoryUsage">Loading...</div>
+                <div class="memory-bar">
+                  <div
+                    class="memory-used"
+                    id="memoryBar"
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">CPU Usage</div>
+                <div class="stat-value" id="cpuUsage">Loading...</div>
+                <div class="cpu-bar">
+                  <div class="cpu-used" id="cpuBar" style="width: 0%"></div>
+                </div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Used Storage</div>
+                <div class="stat-value" id="loadAverage">Loading...</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Platform</div>
+                <div class="stat-value" id="platform">Loading...</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">CPU Cores</div>
+                <div class="stat-value" id="cpuCores">Loading...</div>
+              </div>
+            </div>
+          </div>
+
+          <h2 style="margin-top: 30px">Folders</h2>
+          <br />
+          <button id="geri" onclick="geri()" class="circle-btn">
+            <i class="fa fa-angle-left" style="font-size: 36px"></i></button
+          ><br />
+
+          <div class="files-grid">
+            <% files.forEach(file => { %> <% if (file.type === 'directory') { %>
+            <div class="file-card">
+              <a
+                href="/storage/<%= (folder + '/' + file.name).replace(/\/+/g, '/') %>"
+              >
+                <div class="file-icon folder-icon">📁</div>
+                <div class="file-info">
+                  <div class="file-name"><%= file.name %></div>
+                  <div class="file-meta"></div>
+                </div>
+              </a>
+              <details>
+                <summary>Options</summary>
+                <button
+                  onclick="deleteItem('<%= (folder + '/' + file.name).replace(/\/+/g, '/') %>')"
+                >
+                  <i class="material-icons" style="font-size: 36px">delete</i>
+                </button>
+              </details>
+            </div>
+            <% } else { %>
+            <div class="file-card">
+              <a
+                href="/download/<%= (folder + '/' + file.name).replace(/\/+/g, '/') %>"
+              >
+                <div class="file-icon folder-icon">📄</div>
+                <div class="file-info">
+                  <div class="file-name"><%= file.name %></div>
+                  <div class="file-meta"></div>
+                </div>
+              </a>
+              <details>
+                <summary>Options</summary>
+                <button
+                  onclick="deleteItem('<%= (folder + '/' + file.name).replace(/\/+/g, '/') %>')"
+                >
+                  <i class="material-icons" style="font-size: 36px">delete</i>
+                </button>
+              </details>
+            </div>
+            <% } %> <% }) %>
+            <button onclick="newFolder()" style="border: none">
+              <div class="file-card">
+                <div class="file-icon folder-icon">+</div>
+                <div class="file-info">
+                  <div class="file-name">New Folder</div>
+                </div>
+              </div>
+            </button>
+          </div>
+          <button
+            style="
+              width: 100px;
+              height: 50px;
+              border-radius: 20px;
+              border: black 1px solid;
+              margin-top: 50px;
+            "
+            onclick="toggleUpload()"
+          >
+            Upload files here
+          </button>
+          <div id="boxinput" class="hidden" style="margin-top: 30px;">
+            <input
+              type="file"
+              id="fileInput"
+              name="files"
+              placeholder="Click or drag files"
+            />
+            <br />
+            <button id="uploadBtn">Upload</button>
+            <p id="status"></p>
+          </div>
+        </div>
+        <div id="right-menu" class="terminal">
+          <iframe src="/terminal" frameborder="0"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function toggleUpload() {
+        const upload = document.getElementById("boxinput");
+        upload.classList.toggle("hidden");
+      }
+      function toggleTerminal() {
+        const terminal = document.getElementById("right-menu");
+        terminal.classList.toggle("terminal");
+      }
+
+
+      // Fetch system stats and update the UI
+      function fetchSystemStats() {
+        fetch("/stats")
+          .then((response) => response.json())
+          .then((data) => {
+            // Update uptime
+            const hours = Math.floor(data.uptime / 3600);
+            const minutes = Math.floor((data.uptime % 3600) / 60);
+            const seconds = Math.floor(data.uptime % 60);
+            document.getElementById(
+              "uptime"
+            ).textContent = `${hours}h ${minutes}m ${seconds}s`;
+
+            // Update memory usage
+            const memoryPercentage = (data.usedMemGB / data.totalMemGB) * 100;
+            document.getElementById("memoryUsage").textContent = `${parseFloat(
+              data.usedMemGB
+            ).toFixed(2)} / ${parseFloat(data.totalMemGB).toFixed(2)} GB`;
+            document.getElementById(
+              "memoryBar"
+            ).style.width = `${memoryPercentage}%`;
+
+            // Update CPU usage
+            document.getElementById("cpuUsage").textContent = `${parseFloat(
+              data.cpuUsagePercent
+            ).toFixed(2)}%`;
+            document.getElementById("cpuBar").style.width = `${parseFloat(
+              data.cpuUsagePercent
+            )}%`;
+
+            // Update used storage
+            document.getElementById(
+              "loadAverage"
+            ).textContent = `${data.usedStorage}`;
+
+            // Update platform
+            document.getElementById("platform").textContent =
+              data.platform.charAt(0).toUpperCase() + data.platform;
+
+            // Update CPU cores
+            document.getElementById("cpuCores").textContent = data.cpuCores;
+          })
+          .catch((error) => {
+            console.error("Error fetching system stats:", error);
+          });
+      }
+
+      // Fetch stats immediately and then every 5 seconds
+      fetchSystemStats();
+      setInterval(fetchSystemStats, 5000);
+
+      // Original script.js content would go here
+
+      async function fetchFolderTree() {
+        try {
+          const res = await fetch("/files"); // Replace with your actual endpoint
+          const tree = await res.json();
+          const container = document.getElementById("folder-tree");
+          container.innerHTML = buildTreeHTML(tree, []);
+        } catch (err) {
+          console.error("Failed to load folder tree:", err);
+        }
+      }
+
+      function buildTreeHTML(tree, currentPath) {
+        let html = '<ul style="list-style: none; padding-left: 15px">';
+        for (const node of tree) {
+          if (node.type === "directory") {
+            const fullPath = [...currentPath, node.name].join("/");
+
+            // Check if the folder is named 'storage' and apply styles accordingly
+            const isStorageFolder = node.name === "storage";
+
+            html += `
+          <li>
+            <a href="${isStorageFolder ? "#" : "/" + fullPath}" 
+               style="text-decoration:none; color:${
+                 isStorageFolder ? "red" : "inherit"
+               };">
+              📁 ${node.name}
+            </a>
+            ${
+              node.children && node.children.length > 0
+                ? buildTreeHTML(node.children, [...currentPath, node.name])
+                : ""
+            }
+          </li>
+        `;
+          }
+        }
+        html += "</ul>";
+        return html;
+      }
+
+      fetchFolderTree();
+      function geri() {
+        window.history.back();
+      }
+      function deleteItem(path) {
+        if (confirm(`Are you sure you want to delete "${path}"?`)) {
+          fetch(`/storage/${path}`, {
+            method: "DELETE",
+          })
+            .then((res) => {
+              if (res.ok) {
+                alert("Deleted successfully!");
+                location.reload();
+              } else {
+                return res.text().then((msg) => {
+                  throw new Error(msg);
+                });
+              }
+            })
+            .catch((err) => {
+              alert("Error deleting item: " + err.message);
+            });
+        }
+      }
+      async function newFolder() {
+        const newFolder = prompt("Enter a folder name").trim();
+        if (newFolder.includes(" "))
+          return alert("Folder must no contain spaces");
+        if (!newFolder) return alert("Enter folder name");
+        const locked = confirm(
+          "Do you want to lock the folder? OK -> YES; Cancel -> NO"
+        );
+
+        const currentPath = window.location.pathname.replace(
+          /^\/storage\/?/,
+          ""
+        );
+
+        const res = await fetch("/mkdir", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            currentFolder: currentPath,
+            newFolderName: newFolder,
+            locked: locked,
+          }),
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+          location.reload();
+        } else {
+          alert(data.error || "Failed to create folder");
+        }
+      }
+
+      document
+        .getElementById("uploadBtn")
+        .addEventListener("click", async () => {
+          const files = document.getElementById("fileInput").files;
+          if (!files.length) {
+            document.getElementById("status").textContent = "Əvvəlcə fayl seç";
+            return;
+          }
+
+          const formData = new FormData();
+          for (const file of files) {
+            formData.append("files", file); // "files" must match backend field name
+          }
+
+          // Get current folder from URL (e.g., /codes => "codes")
+          const currentFolder = window.location.pathname.replace(/^\/+/, "");
+          const uploadUrl = currentFolder
+            ? `/upload/${currentFolder}`
+            : "/upload/storage/salam";
+
+          const res = await fetch(uploadUrl, {
+            method: "POST",
+            body: formData,
+          });
+
+          const contentType = res.headers.get("content-type") || "";
+
+          if (contentType.includes("application/json")) {
+            const data = await res.json();
+
+            if (res.ok) {
+              document.getElementById("status").textContent =
+                data.message || "Uploaded successfully";
+              location.reload();
+            } else {
+              document.getElementById("status").textContent =
+                data.error || "Upload failed";
+              alert(data.error || "Upload failed");
+            }
+          } else {
+            // Server returned HTML (likely rendered error page)
+            const html = await res.text();
+            // Replace the whole page with server-rendered error page
+            document.open();
+            document.write(html);
+            document.close();
+          }
+        });
+    </script>
+  </body>
+</html>

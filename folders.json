@@ -1,0 +1,14 @@
+{
+  "/home/emin/Desktop/homelab/uploads/storage/home/": {
+    "owner": "root",
+    "locked": false
+  },
+  "/home/emin/Desktop/homelab/uploads/storage/home/Folder1": {
+    "owner": "root",
+    "locked": false
+  },
+  "/home/emin/Desktop/homelab/uploads/storage/home/[locked][root]Folder2": {
+    "owner": "root",
+    "locked": true
+  }
+}

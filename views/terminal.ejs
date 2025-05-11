@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Terminal</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm/css/xterm.css" />
+  <style>
+    body, html { height: 100vh; margin: 0; background: black; }
+    #terminal { height: 100vh; width: 100%; overflow: visible; }
+  </style>
+</head>
+<body>
+  <div id="terminal"></div>
+  <script src="https://cdn.jsdelivr.net/npm/xterm/lib/xterm.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const term = new Terminal();
+    term.open(document.getElementById('terminal'));
+
+    term.onData(data => socket.emit('input', data));
+    socket.on('output', data => term.write(data));
+  </script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-[!][logo][/screenshots/logo.png]
+[!][logo](/screenshots/logo.png)
 # Home Cloud Storage Server
 
 This project is a functional personal cloud storage system. It is built using Node.js, Express, and EJS. It allows users to upload, delete, download files, and send commands to the server via the terminal.

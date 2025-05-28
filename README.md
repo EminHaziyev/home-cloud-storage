@@ -111,6 +111,7 @@ Thanks for your interest in contributing!
 - [ ] Add backup
 - [ ] Add public link to share some folders
 - [ ] Add temporary files to easily share data between computers (like clipboard)
+- [ ] BUG: When you lock files, the checker function doesn't check all the path, it checks just last folder's name. Needs an update to check all the path with function.
 
 
 ## Contact

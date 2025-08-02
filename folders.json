@@ -2,5 +2,9 @@
   "/home/emin/Desktop/homelab/uploads/storage/home/": {
     "owner": "root",
     "locked": false
+  },
+  "/home/emin/Desktop/home-cloud-storage/uploads/storage/home/[locked][root]asd": {
+    "owner": "root",
+    "locked": true
   }
 }
